@@ -13,7 +13,15 @@ const sidebarItems = [
             { label: "Laporan Selesai", key: "laboratorium-laporan-selesai" },
         ],
     },
-    { label: "Benih", icon: Sprout, key: "benih", soon: true },
+    {
+        label: "Data Benih",
+        icon: Sprout,
+        key: "benih-jenis-benih",
+        children: [
+            { label: "Jenis Benih", key: "benih-jenis-benih" },
+            { label: "Update Benih", key: "benih-update-benih" },
+        ],
+    },
     { label: "User", icon: Users, key: "user", soon: true },
     { label: "Pengaturan", icon: Settings, key: "pengaturan", soon: true },
 ];
@@ -35,7 +43,7 @@ export default function AdminShell({ activeView, onNavigate, children }) {
                         {sidebarItems.map((item) => {
                             const Icon = item.icon;
                             const hasChildren = Array.isArray(item.children);
-                            const isOpen = hasChildren && activeView?.startsWith("laboratorium");
+                            const isOpen = hasChildren && (item.key === "benih-jenis-benih" ? activeView.startsWith("benih") : item.children.some((child) => child.key === activeView));
                             const isActive = activeView === item.key || isOpen;
 
                             return (
