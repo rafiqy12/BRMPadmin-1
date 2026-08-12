@@ -29,6 +29,12 @@ Versi saat ini masih berada pada tahap prototype UI/dashboard admin. Fokus penge
     - Jenis Sampel
     - Data Masuk Laboratorium
     - Laporan Lab Selesai
+- Modul Data Benih dengan tampilan:
+    - Jenis Benih
+    - Update Benih / Riwayat Stok
+    - Form Tambah Jenis Benih
+    - Form Tambah Update Stok
+- Halaman User Management (mock data dan aksi dasar)
 - Navigasi antar modul menggunakan shell admin yang terstruktur
 - Search dan filter visual pada beberapa halaman
 - Statistika monitoring lab dan tren bulanan
@@ -36,11 +42,82 @@ Versi saat ini masih berada pada tahap prototype UI/dashboard admin. Fokus penge
 
 ### Modul yang belum sepenuhnya jadi produk nyata
 
-- Benih / stok benih
-- User management
 - Autentikasi dan role-based access
 - Integrasi backend/database
-- CRUD data nyata
+- Penyimpanan data nyata dan API CRUD penuh
+- Validasi input dan notifikasi sukses/error yang lengkap
+
+---
+
+## 5. Ruang Lingkup Fitur
+
+### 5.1 Dashboard Admin
+
+Dashboard menampilkan ringkasan operasional utama, mencakup:
+
+- permohonan hari ini
+- sampel laboratorium yang diproses
+- stok benih aktif
+- akun aktif
+- log aktivitas terbaru
+- shortcut operasional
+- tren permohonan bulanan
+
+### 5.2 Permohonan
+
+Halaman permohonan berfungsi untuk memantau data masuk dan status proses. Saat ini tampilannya mencakup:
+
+- total permohonan
+- butuh review
+- diterima
+- selesai
+- tabel daftar permohonan dengan kolom data pemohon, pekerjaan, tipe, email, nomor HP, dan status
+- prioritas hari ini dan ringkasan pelayanan
+
+### 5.3 Laboratorium
+
+Modul laboratorium adalah fokus operasional kedua setelah permohonan. Saat ini tersedia beberapa submodul:
+
+- Jenis Sampel
+    - menambah jenis sampel baru
+    - melihat daftar jenis sampel
+    - aksi edit dan hapus
+- Data Masuk Laboratorium
+    - data sample masuk
+    - status proses
+    - tabel monitoring dengan filter bulan dan tahun
+- Laporan Lab Selesai
+    - daftar laporan sampel finished
+    - tombol aksi lihat dan buka file laporan
+
+### 5.4 Data Benih
+
+Modul benih kini memiliki beberapa halaman terkait stok dan entri data:
+
+- Jenis Benih
+    - daftar jenis benih dengan foto, stok, dan harga
+    - aksi edit dan hapus
+- Update Benih
+    - riwayat perubahan stok masuk/keluar
+    - ringkasan total masuk, total keluar, dan stok tersedia
+    - tombol Tambah Update Stok
+- Tambah Jenis Benih
+    - form untuk menambah jenis benih baru
+    - upload foto benih
+    - judul, harga, dan deskripsi
+- Tambah Update Stok
+    - form untuk mencatat stok masuk atau keluar
+    - pilihan jenis benih, jenis update, jumlah, tanggal, dan catatan
+
+### 5.5 Monitoring dan Status
+
+Aplikasi menyediakan komponen monitoring untuk memperlihatkan:
+
+- jumlah sampel masuk
+- dalam proses
+- selesai
+- stok benih aktif
+- tren layanan dan aktivitas terbaru
 
 ---
 

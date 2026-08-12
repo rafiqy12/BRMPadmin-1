@@ -3,6 +3,11 @@ import AdminDashboardPage from "./AdminDashboardPage";
 import LaboratoriumPage from "./LaboratoriumPage";
 import PermohonanPage from "./PermohonanPage";
 import AdminShell from "./components/AdminShell";
+import BenihPage from "./BenihPage";
+import AddBenihPage from "./AddBenihPage";
+import UpdateBenihPage from "./UpdateBenihPage";
+import AddUpdateStokPage from "./AddUpdateStokPage";
+import UserMen from "./usermen";
 
 const aduanRows = [
     {
@@ -66,7 +71,23 @@ export default function App() {
 
     return (
         <AdminShell activeView={activeView} onNavigate={setActiveView}>
-            {activeView === "permohonan" ? <PermohonanPage onNavigate={setActiveView} rows={aduanRows} /> : isLaboratoriumView ? <LaboratoriumPage activeTab={activeView} onNavigate={setActiveView} /> : <AdminDashboardPage />}
+            {activeView === "permohonan" ? (
+                <PermohonanPage onNavigate={setActiveView} rows={aduanRows} />
+            ) : isLaboratoriumView ? (
+                <LaboratoriumPage activeTab={activeView} onNavigate={setActiveView} />
+            ) : activeView === "benih-tambah-jenis-benih" ? (
+                <AddBenihPage onNavigate={setActiveView} />
+            ) : activeView === "benih-tambah-update-stok" ? (
+                <AddUpdateStokPage onNavigate={setActiveView} />
+            ) : activeView === "benih-update-benih" ? (
+                <UpdateBenihPage onNavigate={setActiveView} />
+            ) : activeView.startsWith("benih") ? (
+                <BenihPage activeTab={activeView} onNavigate={setActiveView} />
+            ) : activeView === "user" ? (
+                <UserMen />
+            ) : (
+                <AdminDashboardPage />
+            )}
         </AdminShell>
     );
 }
