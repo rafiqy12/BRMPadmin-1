@@ -1,84 +1,141 @@
-# PRD Update - BRMP DIY Admin Dashboard
+# PRD - BRMP DIY Admin Dashboard
 
-Dokumen ini menjelaskan kebutuhan produk dan arah pengembangan aplikasi web BRMP DIY yang saat ini difokuskan pada dashboard admin untuk mendukung operasional layanan pertanian.
+Dokumen ini memuat kebutuhan produk dan kondisi terkini aplikasi admin BRMP DIY berdasarkan implementasi frontend yang ada saat ini. Fokus utama saat ini adalah membangun antarmuka operasional admin yang terstruktur untuk mengelola layanan dan laboratorium secara terpusat.
 
 ---
 
-## 1. Tujuan Produk
+## 1. Ringkasan Produk
 
-BRMP DIY dikembangkan sebagai sistem informasi terpadu yang membantu tim admin mengelola berbagai aktivitas operasional secara terpusat, termasuk:
+BRMP DIY Admin Dashboard adalah aplikasi admin internal yang dirancang untuk membantu tim operasional memantau dan mengelola kegiatan penting dalam satu tampilan. Aplikasi ini berfungsi sebagai dashboard kontrol untuk melihat kondisi layanan, progres laboratorium, dan ringkasan aktivitas harian.
 
-- permohonan layanan
-- progress laboratorium
-- data benih dan stok
-- pengguna sistem
-- aktivitas operasional harian
+Tujuan utamanya adalah:
+
+- mempercepat monitoring operasional
+- memudahkan admin melihat status permohonan
+- memberikan overview laboratorium secara real-time seperti mock data
+- membuat workflow administrasi lebih rapi dan mudah dikelola
 
 ---
 
 ## 2. Fokus Aplikasi Saat Ini
 
-Versi saat ini berfokus pada tampilan dashboard admin yang modern, rapi, dan mudah dipantau.
+Versi saat ini masih berada pada tahap prototype UI/dashboard admin. Fokus pengembangan adalah pengalaman pengguna yang bersih, modern, dan mudah dipahami untuk kebutuhan internal.
 
-### Fitur utama yang sudah disajikan
+### Modul yang sudah tersedia saat ini
 
 - Dashboard utama dengan ringkasan KPI
-- Sidebar navigasi untuk modul utama
-- Daftar permohonan terbaru dengan status
-- Log aktivitas terkini
-- Shortcut aksi cepat untuk operasional
-- Modul preview: Permohonan, Laboratorium, Benih, dan User
-- Visual tren bulanan dan status sampel laboratorium
+- Halaman Permohonan Layanan
+- Halaman Laboratorium dengan beberapa sub-tampilan:
+    - Jenis Sampel
+    - Data Masuk Laboratorium
+    - Laporan Lab Selesai
+- Navigasi antar modul menggunakan shell admin yang terstruktur
+- Search dan filter visual pada beberapa halaman
+- Statistika monitoring lab dan tren bulanan
+- Log aktivitas dan shortcut aksi cepat
+
+### Modul yang belum sepenuhnya jadi produk nyata
+
+- Benih / stok benih
+- User management
+- Autentikasi dan role-based access
+- Integrasi backend/database
+- CRUD data nyata
 
 ---
 
-## 3. Visi UI/UX
+## 3. Pengguna Utama
 
-Desain aplikasi mengusung nuansa pertanian yang kuat dengan warna hijau, putih, dan elemen visual yang bersih serta profesional.
-
-Karakteristik visual yang diutamakan:
-
-- modern dan ergonomis
-- mudah dibaca
-- fokus pada efisiensi admin
-- konsisten antar komponen
-
----
-
-## 4. Pengguna Utama
-
-Aplikasi ini ditujukan terutama untuk pengguna internal, terutama:
+Aplikasi ini ditujukan untuk pengguna internal BRMP DIY, terutama:
 
 - Superadmin
-- Admin Lab
-- Admin Layanan
+- Admin Laboratorium
+- Admin Layanan / Permohonan
 - Operator
-- Viewer (rencana pengembangan berikutnya)
+- Tim teknis / pengelola data internal
+
+---
+
+## 4. Visi UI/UX
+
+Desain aplikasi menggunakan pola dashboard modern dengan nuansa agribisnis dan operasional yang rapi. Tampilan dibuat agar cepat dibaca, ringkas, dan konsisten di tiap halaman.
+
+Karakteristik utama:
+
+- warna dominan hijau, putih, dan nuansa bumi/pertanian
+- layout yang rapi dan efisien
+- prioritas pada informasi utama di bagian atas
+- penggunaan card, badge, dan tabel untuk visual data
+- tombol aksi cepat untuk kebutuhan admin sehari-hari
 
 ---
 
 ## 5. Ruang Lingkup Fitur
 
-### Dashboard Admin
+### 5.1 Dashboard Admin
 
-Menampilkan data penting dalam satu tampilan, seperti:
+Dashboard menampilkan ringkasan operasional utama, mencakup:
 
-- jumlah permohonan hari ini
+- permohonan hari ini
 - sampel laboratorium yang diproses
 - stok benih aktif
 - akun aktif
+- log aktivitas terbaru
+- shortcut operasional
+- tren permohonan bulanan
 
-### Modul yang menjadi fokus utama
+### 5.2 Permohonan
 
-- Permohonan
-- Laboratorium
-- Benih
-- User
-- Pengaturan
+Halaman permohonan berfungsi untuk memantau data masuk dan status proses. Saat ini tampilannya mencakup:
+
+- total permohonan
+- butuh review
+- diterima
+- selesai
+- tabel daftar permohonan dengan kolom data pemohon, pekerjaan, tipe, email, nomor HP, dan status
+- prioritas hari ini dan ringkasan pelayanan
+
+### 5.3 Laboratorium
+
+Modul laboratorium adalah fokus operasional kedua setelah permohonan. Saat ini tersedia beberapa submodul:
+
+- Jenis Sampel
+    - menambah jenis sampel baru
+    - melihat daftar jenis sampel
+    - aksi edit dan hapus
+- Data Masuk Laboratorium
+    - data sample masuk
+    - status proses
+    - tabel monitoring dengan filter bulan dan tahun
+- Laporan Lab Selesai
+    - daftar laporan sampel finished
+    - tombol aksi lihat dan buka file laporan
+
+### 5.4 Monitoring dan Status
+
+Aplikasi menyediakan komponen monitoring untuk memperlihatkan:
+
+- jumlah sampel masuk
+- dalam proses
+- selesai
+- progress bar status
+- ringkasan total sampel
 
 ---
 
-## 6. Teknologi yang Digunakan
+## 6. Status Pengembangan Saat Ini
+
+Saat ini proyek berada pada tahapan UI prototype/admin dashboard dengan data statis/mock. Artinya:
+
+- tampilan antarmuka sudah tersedia dan terstruktur
+- navigasi antar modul sudah berjalan
+- data masih bersifat sample / demo
+- belum ada backend dan database terhubung secara nyata
+- belum ada auth/role management yang benar-benar terimplementasi
+
+---
+
+## 7. Teknologi yang Digunakan
 
 - React.js
 - Vite
@@ -87,40 +144,67 @@ Menampilkan data penting dalam satu tampilan, seperti:
 
 ---
 
-## 7. Status Pengembangan Saat Ini
+## 8. Produk Requirement Summary
 
-Saat ini aplikasi sudah memiliki tampilan dashboard admin yang fungsional sebagai prototype UI.
+### Functional requirements
 
-Status saat ini:
+- admin dapat melihat overview operasional di dashboard
+- admin dapat membuka halaman permohonan dan melihat data status
+- admin dapat melihat data laboratorium secara terpisah per submodul
+- admin dapat mencari dan memfilter data di beberapa halaman
+- admin dapat melakukan aksi cepat seperti review, import, dan monitoring
 
-- UI dashboard sudah tersedia
-- data masih bersifat statis/mock
-- integrasi backend dan database belum diterapkan
-- navigasi modul masih dalam tahap pengembangan lanjutan
+### Non-functional requirements
+
+- tampilan harus responsif untuk desktop dan tablet
+- antarmuka harus bersih, mudah dibaca, dan konsisten
+- pengalaman pengguna harus fokus pada efisiensi operasional
+- UI harus siap dikembangkan lebih lanjut ke sistem data nyata
 
 ---
 
-## 8. Rencana Pengembangan Selanjutnya
+## 9. Rencana Pengembangan Selanjutnya
 
-Prioritas berikutnya adalah mengubah dashboard ini menjadi sistem yang lebih lengkap dan terhubung data nyata:
+Prioritas berikutnya untuk mengubah dashboard ini menjadi sistem operasional yang lebih lengkap:
 
 1. Integrasi autentikasi dan role-based access
-2. Penghubungan data ke backend/database
-3. CRUD untuk permohonan, laboratorium, benih, dan user
-4. Tambah fitur real-time monitoring
-5. Perluasan modul sesuai kebutuhan operasional BRMP DIY
+2. Koneksi ke backend dan database
+3. CRUD untuk permohonan, laboratorium, jenis sampel, dan data user
+4. Pembuatan modul benih dan inventory
+5. Real-time monitoring dan notifikasi
+6. Export laporan PDF/Excel yang benar-benar terhubung ke data
+7. Audit log dan histori perubahan data
 
 ---
 
-## 9. Cara Menjalankan Proyek
+## 10. Status Saat Ini vs Tujuan Produk
+
+| Area            | Status saat ini             | Target masa depan              |
+| --------------- | --------------------------- | ------------------------------ |
+| Dashboard admin | Sudah ada                   | Dipertahankan dan dikembangkan |
+| Permohonan      | UI dan mock data sudah ada  | CRUD + integrasi backend       |
+| Laboratorium    | UI dan monitoring sudah ada | Data nyata + workflow lengkap  |
+| User management | Belum ada                   | Full user & role management    |
+| Benih / stok    | Belum ada                   | Modul inventory lengkap        |
+| Backend         | Belum ada                   | API + database terintegrasi    |
+
+---
+
+## 11. Cara Menjalankan Proyek
 
 ```bash
-# Install dependencies
+# Install dependency
 npm install
 
-# Jalankan developer server
+# Jalankan aplikasi lokal
 npm run dev
 
 # Build untuk produksi
 npm run build
 ```
+
+---
+
+## 12. Kesimpulan
+
+BRMP DIY Admin Dashboard saat ini sudah menjadi prototype dashboard operasional yang cukup solid untuk kebutuhan admin internal. Fokus utamanya adalah memberi pandangan menyeluruh terhadap proses permohonan dan laboratorium, dengan potensi pengembangan lebih lanjut menjadi sistem manajemen BRMP DIY yang lengkap dan terintegrasi.
