@@ -22,8 +22,8 @@ const sidebarItems = [
             { label: "Update Benih", key: "benih-update-benih" },
         ],
     },
-    { label: "User", icon: Users, key: "user", soon: true },
-    { label: "Pengaturan", icon: Settings, key: "pengaturan", soon: true },
+    { label: "User", icon: Users, key: "user" },
+    { label: "Pengaturan", icon: Settings, key: "pengaturan" },
 ];
 
 export default function AdminShell({ activeView, onNavigate, children }) {

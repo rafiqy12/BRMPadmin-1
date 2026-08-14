@@ -8,7 +8,7 @@ const initialUsers = [
 
 const roles = ["Operator", "Admin", "Viewer"];
 
-export default function UserMen() {
+export default function UserMen({ onNavigate }) {
     const [users, setUsers] = useState(initialUsers);
     const [editingId, setEditingId] = useState(null);
     const [form, setForm] = useState({ name: "", email: "", role: roles[0] });
@@ -46,7 +46,12 @@ export default function UserMen() {
 
     return (
         <div className="rounded-lg bg-white p-6 shadow">
-            <h2 className="mb-4 text-2xl font-semibold">Manajemen User</h2>
+            <div className="mb-4 flex items-center justify-between gap-3">
+                <h2 className="text-2xl font-semibold">Manajemen User</h2>
+                <button onClick={() => onNavigate?.("dashboard")} className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100">
+                    Kembali
+                </button>
+            </div>
 
             <div className="mb-4 flex gap-2">
                 <input value={newUser.name} onChange={(e) => setNewUser({ ...newUser, name: e.target.value })} placeholder="Nama" className="rounded border px-3 py-2" />
@@ -58,7 +63,9 @@ export default function UserMen() {
                         </option>
                     ))}
                 </select>
-                <button onClick={addUser} className="rounded bg-brand-500 px-4 py-2 text-white">Tambah</button>
+                <button onClick={addUser} className="rounded bg-brand-500 px-4 py-2 text-white">
+                    Tambah
+                </button>
             </div>
 
             <div className="overflow-x-auto">
@@ -77,21 +84,9 @@ export default function UserMen() {
                             <tr key={u.id} className="border-t">
                                 <td className="py-3 w-12">{u.id}</td>
 
-                                <td className="py-3">
-                                    {editingId === u.id ? (
-                                        <input className="w-full rounded border px-2 py-1" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-                                    ) : (
-                                        <div className="font-medium">{u.name}</div>
-                                    )}
-                                </td>
+                                <td className="py-3">{editingId === u.id ? <input className="w-full rounded border px-2 py-1" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /> : <div className="font-medium">{u.name}</div>}</td>
 
-                                <td className="py-3">
-                                    {editingId === u.id ? (
-                                        <input className="w-full rounded border px-2 py-1" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
-                                    ) : (
-                                        <div className="text-slate-600">{u.email}</div>
-                                    )}
-                                </td>
+                                <td className="py-3">{editingId === u.id ? <input className="w-full rounded border px-2 py-1" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /> : <div className="text-slate-600">{u.email}</div>}</td>
 
                                 <td className="py-3">
                                     {editingId === u.id ? (
@@ -119,13 +114,21 @@ export default function UserMen() {
                                 <td className="py-3 space-x-2">
                                     {editingId === u.id ? (
                                         <>
-                                            <button onClick={() => saveEdit(u.id)} className="rounded bg-green-600 px-3 py-1 text-white">Simpan</button>
-                                            <button onClick={cancelEdit} className="rounded border px-3 py-1">Batal</button>
+                                            <button onClick={() => saveEdit(u.id)} className="rounded bg-green-600 px-3 py-1 text-white">
+                                                Simpan
+                                            </button>
+                                            <button onClick={cancelEdit} className="rounded border px-3 py-1">
+                                                Batal
+                                            </button>
                                         </>
                                     ) : (
                                         <>
-                                            <button onClick={() => startEdit(u)} className="rounded border px-3 py-1">Edit</button>
-                                            <button onClick={() => deleteUser(u.id)} className="rounded bg-red-600 px-3 py-1 text-white">Hapus</button>
+                                            <button onClick={() => startEdit(u)} className="rounded border px-3 py-1">
+                                                Edit
+                                            </button>
+                                            <button onClick={() => deleteUser(u.id)} className="rounded bg-red-600 px-3 py-1 text-white">
+                                                Hapus
+                                            </button>
                                         </>
                                     )}
                                 </td>
@@ -137,4 +140,3 @@ export default function UserMen() {
         </div>
     );
 }
-

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import LoginPage from "./LoginPage";
 import AdminDashboardPage from "./AdminDashboardPage";
 import LaboratoriumPage from "./LaboratoriumPage";
 import PermohonanPage from "./PermohonanPage";
@@ -8,6 +9,7 @@ import AddBenihPage from "./AddBenihPage";
 import UpdateBenihPage from "./UpdateBenihPage";
 import AddUpdateStokPage from "./AddUpdateStokPage";
 import UserMen from "./usermen";
+import SettingsPage from "./SettingsPage";
 
 const aduanRows = [
     {
@@ -65,9 +67,14 @@ const aduanRows = [
 ];
 
 export default function App() {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [activeView, setActiveView] = useState("dashboard");
 
     const isLaboratoriumView = activeView.startsWith("laboratorium");
+
+    if (!isLoggedIn) {
+        return <LoginPage onLogin={() => setIsLoggedIn(true)} />;
+    }
 
     return (
         <AdminShell activeView={activeView} onNavigate={setActiveView}>
@@ -84,7 +91,9 @@ export default function App() {
             ) : activeView.startsWith("benih") ? (
                 <BenihPage activeTab={activeView} onNavigate={setActiveView} />
             ) : activeView === "user" ? (
-                <UserMen />
+                <UserMen onNavigate={setActiveView} />
+            ) : activeView === "pengaturan" ? (
+                <SettingsPage onNavigate={setActiveView} />
             ) : (
                 <AdminDashboardPage />
             )}
