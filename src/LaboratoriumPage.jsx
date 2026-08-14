@@ -1,6 +1,7 @@
 import { ArrowLeft, CheckCircle2, Edit3, Eye, FileText, Filter, Plus, Search, Trash2 } from "lucide-react";
+import { useState } from "react";
 
-const sampleRows = [
+const initialSampleRows = [
     { no: 1, name: "Tanah / Soil" },
     { no: 2, name: "Pupuk Organik" },
     { no: 3, name: "Tanaman / Daun" },
@@ -8,13 +9,13 @@ const sampleRows = [
     { no: 5, name: "Air Irigasi" },
 ];
 
-const incomingRows = [
+const initialIncomingRows = [
     { no: 1, tanggal: "11-08-2026", nama: "Ajiman", noSPK: "A177/2026", kodeLab: "A-444", jenisAnalisis: "analisis", status: "Selesai" },
     { no: 2, tanggal: "11-08-2026", nama: "coba", noSPK: "A146/2025", kodeLab: "21", jenisAnalisis: "soil", status: "Selesai" },
     { no: 3, tanggal: "10-08-2026", nama: "PT. Delima Unggul", noSPK: "B174/2026", kodeLab: "23", jenisAnalisis: "Kadar Air & Kesesuaian", status: "Proses" },
 ];
 
-const finishedRows = [
+const initialFinishedRows = [
     { no: 1, tanggal: "11-08-2026", nama: "Ajiman", noSPK: "A177/2026", kodeLab: "A-444", jenisAnalisis: "analisis", status: "Selesai", fileLaporan: "PDF / DOC" },
     { no: 2, tanggal: "11-08-2026", nama: "coba", noSPK: "A146/2025", kodeLab: "21", jenisAnalisis: "soil", status: "Selesai", fileLaporan: "Tidak ada" },
 ];
@@ -124,6 +125,89 @@ function StatusPill({ status }) {
 
 export default function LaboratoriumPage({ activeTab, onNavigate }) {
     const current = tabMeta[activeTab] ?? tabMeta["laboratorium-jenis-sampel"];
+    const [sampleRows, setSampleRows] = useState(initialSampleRows);
+    const [incomingRows, setIncomingRows] = useState(initialIncomingRows);
+    const [finishedRows, setFinishedRows] = useState(initialFinishedRows);
+    const [newSample, setNewSample] = useState("");
+    const [editingId, setEditingId] = useState(null);
+    const [editingName, setEditingName] = useState("");
+    const [newEntry, setNewEntry] = useState({
+        tanggal: "12-08-2026",
+        nama: "",
+        noSPK: "",
+        kodeLab: "",
+        jenisAnalisis: "",
+        status: "Proses",
+    });
+
+    const addSample = () => {
+        const name = newSample.trim();
+        if (!name) return;
+
+        setSampleRows((prev) => [...prev, { no: prev.length ? prev[prev.length - 1].no + 1 : 1, name }]);
+        setNewSample("");
+    };
+
+    const beginEditSample = (row) => {
+        setEditingId(row.no);
+        setEditingName(row.name);
+    };
+
+    const saveSample = () => {
+        if (!editingName.trim()) return;
+
+        setSampleRows((prev) => prev.map((row) => (row.no === editingId ? { ...row, name: editingName.trim() } : row)));
+        setEditingId(null);
+        setEditingName("");
+    };
+
+    const deleteSample = (no) => {
+        setSampleRows((prev) => prev.filter((row) => row.no !== no));
+        if (editingId === no) {
+            setEditingId(null);
+            setEditingName("");
+        }
+    };
+
+    const addIncomingRow = () => {
+        if (!newEntry.nama.trim() || !newEntry.noSPK.trim() || !newEntry.kodeLab.trim()) return;
+
+        setIncomingRows((prev) => [
+            {
+                no: prev.length ? prev[prev.length - 1].no + 1 : 1,
+                ...newEntry,
+                status: newEntry.status || "Proses",
+            },
+            ...prev,
+        ]);
+
+        setNewEntry({
+            tanggal: "12-08-2026",
+            nama: "",
+            noSPK: "",
+            kodeLab: "",
+            jenisAnalisis: "",
+            status: "Proses",
+        });
+    };
+
+    const deleteIncomingRow = (no) => {
+        setIncomingRows((prev) => prev.filter((row) => row.no !== no));
+    };
+
+    const toggleIncomingStatus = (no) => {
+        setIncomingRows((prev) =>
+            prev.map((row) => {
+                if (row.no !== no) return row;
+                const nextStatus = row.status === "Proses" ? "Selesai" : "Proses";
+                return { ...row, status: nextStatus };
+            }),
+        );
+    };
+
+    const openReport = (row) => {
+        window.alert(`Laporan untuk ${row.nama}\nNo. SPK: ${row.noSPK}\nKode Lab: ${row.kodeLab}`);
+    };
 
     if (activeTab !== "laboratorium-jenis-sampel") {
         return (
@@ -150,16 +234,38 @@ export default function LaboratoriumPage({ activeTab, onNavigate }) {
                         </section>
 
                         <section className="rounded-[1.5rem] border border-slate-100 bg-white p-5 shadow-sm">
-                            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                                <div className="flex flex-wrap gap-2 text-xs font-semibold text-slate-500">
-                                    <span className="rounded-full bg-slate-100 px-3 py-2">Copy</span>
-                                    <span className="rounded-full bg-slate-100 px-3 py-2">Excel</span>
-                                    <span className="rounded-full bg-slate-100 px-3 py-2">PDF</span>
-                                    <span className="rounded-full bg-slate-100 px-3 py-2">Column visibility</span>
+                            <div className="mb-5 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+                                <label className="block text-sm font-medium text-slate-700 xl:col-span-1">
+                                    Tanggal
+                                    <input type="text" value={newEntry.tanggal} onChange={(e) => setNewEntry((prev) => ({ ...prev, tanggal: e.target.value }))} className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none focus:border-brand-400 focus:bg-white" />
+                                </label>
+                                <label className="block text-sm font-medium text-slate-700 xl:col-span-1">
+                                    Nama
+                                    <input type="text" value={newEntry.nama} onChange={(e) => setNewEntry((prev) => ({ ...prev, nama: e.target.value }))} placeholder="Nama pelanggan" className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none focus:border-brand-400 focus:bg-white" />
+                                </label>
+                                <label className="block text-sm font-medium text-slate-700 xl:col-span-1">
+                                    No. SPK
+                                    <input type="text" value={newEntry.noSPK} onChange={(e) => setNewEntry((prev) => ({ ...prev, noSPK: e.target.value }))} placeholder="A123/2026" className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none focus:border-brand-400 focus:bg-white" />
+                                </label>
+                                <label className="block text-sm font-medium text-slate-700 xl:col-span-1">
+                                    Kode Lab
+                                    <input type="text" value={newEntry.kodeLab} onChange={(e) => setNewEntry((prev) => ({ ...prev, kodeLab: e.target.value }))} placeholder="K-01" className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none focus:border-brand-400 focus:bg-white" />
+                                </label>
+                                <div className="flex items-end gap-2">
+                                    <label className="block w-full text-sm font-medium text-slate-700">
+                                        Status
+                                        <select value={newEntry.status} onChange={(e) => setNewEntry((prev) => ({ ...prev, status: e.target.value }))} className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none focus:border-brand-400 focus:bg-white">
+                                            <option value="Proses">Proses</option>
+                                            <option value="Selesai">Selesai</option>
+                                        </select>
+                                    </label>
+                                    <button onClick={addIncomingRow} className="h-[52px] rounded-2xl bg-brand-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-brand-600">
+                                        Tambah
+                                    </button>
                                 </div>
-                                <label className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-500 shadow-sm">
-                                    <Search size={16} />
-                                    <span>Cari data...</span>
+                                <label className="block text-sm font-medium text-slate-700 xl:col-span-5">
+                                    Jenis Analisis
+                                    <input type="text" value={newEntry.jenisAnalisis} onChange={(e) => setNewEntry((prev) => ({ ...prev, jenisAnalisis: e.target.value }))} placeholder="Contoh: Soil, Kadar Air, Analisis Benih" className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none focus:border-brand-400 focus:bg-white" />
                                 </label>
                             </div>
 
@@ -174,6 +280,7 @@ export default function LaboratoriumPage({ activeTab, onNavigate }) {
                                             <th className="px-4 py-3 text-left font-semibold">KODE LAB</th>
                                             <th className="px-4 py-3 text-left font-semibold">JENIS ANALISIS</th>
                                             <th className="px-4 py-3 text-left font-semibold">STATUS</th>
+                                            <th className="px-4 py-3 text-left font-semibold">AKSI</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-100 bg-white">
@@ -186,7 +293,16 @@ export default function LaboratoriumPage({ activeTab, onNavigate }) {
                                                 <td className="px-4 py-3 text-slate-700">{row.kodeLab}</td>
                                                 <td className="px-4 py-3 text-slate-700">{row.jenisAnalisis}</td>
                                                 <td className="px-4 py-3">
-                                                    <StatusPill status={row.status} />
+                                                    <button onClick={() => toggleIncomingStatus(row.no)} className="cursor-pointer">
+                                                        <StatusPill status={row.status} />
+                                                    </button>
+                                                </td>
+                                                <td className="px-4 py-3">
+                                                    <div className="flex gap-2">
+                                                        <button onClick={() => deleteIncomingRow(row.no)} className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-rose-100 text-rose-600 transition hover:bg-rose-200">
+                                                            <Trash2 size={14} />
+                                                        </button>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         ))}
@@ -257,10 +373,10 @@ export default function LaboratoriumPage({ activeTab, onNavigate }) {
                                                 <td className="px-4 py-3 text-slate-700">{row.fileLaporan}</td>
                                                 <td className="px-4 py-3">
                                                     <div className="flex gap-2">
-                                                        <button className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-emerald-100 text-emerald-700 transition hover:bg-emerald-200">
+                                                        <button onClick={() => openReport(row)} className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-emerald-100 text-emerald-700 transition hover:bg-emerald-200">
                                                             <Eye size={14} />
                                                         </button>
-                                                        <button className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-sky-100 text-sky-700 transition hover:bg-sky-200">
+                                                        <button onClick={() => openReport(row)} className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-sky-100 text-sky-700 transition hover:bg-sky-200">
                                                             <FileText size={14} />
                                                         </button>
                                                     </div>
@@ -293,13 +409,34 @@ export default function LaboratoriumPage({ activeTab, onNavigate }) {
                     <div className="mt-5 space-y-4">
                         <label className="block text-sm font-medium text-slate-700">
                             Nama Jenis Sampel
-                            <input type="text" placeholder="Contoh: Pupuk NPK" className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-brand-400 focus:bg-white" />
+                            <input value={newSample} onChange={(e) => setNewSample(e.target.value)} type="text" placeholder="Contoh: Pupuk NPK" className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-brand-400 focus:bg-white" />
                         </label>
-                        <button className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
+                        <button onClick={addSample} className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
                             <Plus size={16} />
                             Simpan Jenis Sampel
                         </button>
                     </div>
+
+                    {editingId !== null ? (
+                        <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-4">
+                            <p className="text-sm font-semibold text-amber-700">Edit jenis sampel</p>
+                            <input value={editingName} onChange={(e) => setEditingName(e.target.value)} className="mt-3 w-full rounded-2xl border border-amber-200 bg-white px-4 py-3 text-sm outline-none" />
+                            <div className="mt-3 flex gap-2">
+                                <button onClick={saveSample} className="rounded-xl bg-amber-600 px-3 py-2 text-sm font-semibold text-white">
+                                    Simpan
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setEditingId(null);
+                                        setEditingName("");
+                                    }}
+                                    className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700"
+                                >
+                                    Batal
+                                </button>
+                            </div>
+                        </div>
+                    ) : null}
                 </article>
 
                 <article className="rounded-[1.5rem] border border-slate-100 bg-white p-5 shadow-sm">
@@ -320,10 +457,10 @@ export default function LaboratoriumPage({ activeTab, onNavigate }) {
                                         <td className="px-4 py-3 font-medium text-slate-900">{row.name}</td>
                                         <td className="px-4 py-3">
                                             <div className="flex justify-end gap-2">
-                                                <button className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-amber-100 text-amber-600 transition hover:bg-amber-200">
+                                                <button onClick={() => beginEditSample(row)} className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-amber-100 text-amber-600 transition hover:bg-amber-200">
                                                     <Edit3 size={14} />
                                                 </button>
-                                                <button className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-rose-100 text-rose-600 transition hover:bg-rose-200">
+                                                <button onClick={() => deleteSample(row.no)} className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-rose-100 text-rose-600 transition hover:bg-rose-200">
                                                     <Trash2 size={14} />
                                                 </button>
                                             </div>
@@ -338,9 +475,9 @@ export default function LaboratoriumPage({ activeTab, onNavigate }) {
 
             <section className="grid gap-4 md:grid-cols-3">
                 {[
-                    { title: "Tersedia", value: "5 jenis" },
-                    { title: "Aktif hari ini", value: "12 input" },
-                    { title: "Butuh validasi", value: "2 jenis" },
+                    { title: "Tersedia", value: `${sampleRows.length} jenis` },
+                    { title: "Aktif hari ini", value: `${incomingRows.length} input` },
+                    { title: "Butuh validasi", value: `${incomingRows.filter((row) => row.status === "Proses").length} jenis` },
                 ].map((item) => (
                     <article key={item.title} className="rounded-[1.5rem] border border-slate-100 bg-white p-5 shadow-sm">
                         <p className="text-sm text-slate-500">{item.title}</p>

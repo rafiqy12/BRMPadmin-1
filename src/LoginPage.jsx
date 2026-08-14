@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 function BrmpLogo() {
-    return <img src="/brmp-logo.svg" alt="Logo BRMP DIY" className="h-44 w-44 sm:h-52 sm:w-52 object-contain drop-shadow-[0_14px_26px_rgba(15,110,58,0.18)]" />;
+    return <img src="/LOGO-KEMENTAN.png" alt="Logo BRMP DIY" className="h-44 w-44 sm:h-52 sm:w-52 object-contain drop-shadow-[0_14px_26px_rgba(15,110,58,0.18)]" />;
 }
 
 export default function LoginPage({ onLogin }) {
